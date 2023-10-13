@@ -1,0 +1,128 @@
+#!/bin/bash
+# Default values
+g_dst_save_path=$HOME/.klei/DoNotStarveTogether
+param_cluster_serial="0"
+param_tmux_session_name="dst-0"
+m_command=""
+m_argument=""
+
+# Get the directory path of the script
+m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+# Function to display help message
+display_help() {
+    echo "Usage: $0 [options] command [argument]"
+    echo "Options:"
+    echo "  -C <cluster_serial_number>  Specify XX of folder 'Cluster_XX'"
+    echo "  -s <session_name>           New tmux session name"
+    echo "  -m --master                 Select Master Cluster"
+    echo "  -c --caves                  Select Caves Cluster"
+    echo "  -h --help                   Display this help message"
+    echo "Commands:"
+    echo "  start       Start server for Cluster_xx"
+    echo "  shutdown    Shutdown tmux and server for Cluster_xx"
+    echo "  update      Update modlist"
+    echo "  upgrade     Update server and mods"
+    echo "  backup      Backup Cluster folder"
+}
+
+# Parse command line options and arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      # Display help message
+      display_help
+      exit;;
+    -C)
+      # cluster_serial_number
+      shift
+      param_cluster_serial=$1
+      if [[ ! $param_cluster_serial =~ ^[0-9]+$ ]]; then
+        echo "Paramater of "-C" should number, please check."
+        exit 1
+      fi
+      if (( ! $param_cluster_serial>=1 && $param_cluster_serial<100 )); then
+        echo "Maybe the cluster serial num range 1~100, please check."
+        exit 1
+      fi
+      ;;
+    -s)
+      # session_name
+      shift
+      param_tmux_session_name=$1
+      ;;
+    -m)
+      # developing
+      ;;
+    -c)
+      # developing
+      ;;
+    *)
+      # Capture the command and argument
+      m_command=$1
+      m_argument=$2
+      break;;
+  esac
+  shift
+done
+
+# echo command: $m_command
+# echo argu: $m_argument
+# Check if command argument is provided
+if [ -z "$m_command" ]; then
+  echo "Error: Command argument is required."
+  display_help
+  exit 1
+fi
+
+# Perform actions based on the specified command
+case $m_command in
+  start)
+    # Code to perform the 'start' command
+    if [ ! -f "${m_script_dir}/../dst_start.sh" ]; then
+        echo "${m_script_dir}/../dst_start.sh not found, please check."
+    fi
+    echo "Running 'command' command"
+    ${m_script_dir}/../dst_start.sh -C $cluster_serial_number -s $param_tmux_session_name
+    ;;
+  shutdown)
+    # Code to perform the 'shutdown' command
+    if [ ! -f "${m_script_dir}/../dst_shutdown.sh" ]; then
+        echo "${m_script_dir}/../dst_shutdown.sh not found, please check."
+    fi
+    echo "Running 'shutdown' command"
+    ${m_script_dir}/../dst_shutdown.sh -C $cluster_serial_number -s $param_tmux_session_name
+    ;;
+  update)
+    # Code to perform the 'update' command
+    if [ ! -f "${m_script_dir}/../dst_update_modlist.sh" ]; then
+        echo "${m_script_dir}/../dst_update_modlist.sh not found, please check."
+    fi
+    echo "Running 'update' command"
+    ${m_script_dir}/../dst_update_modlist.sh $cluster_serial_number
+    ;;
+  upgrade)
+    # Code to perform the 'upgrade' command
+    if [ ! -f "${m_script_dir}/../dst_update.sh" ]; then
+        echo "${m_script_dir}/../dst_update.sh not found, please check."
+    fi
+    echo "Running 'upgrade' command"
+    ${m_script_dir}/../dst_update.sh 
+    ;;
+  backup)
+    # Code to perform the 'backup' command
+    if [ ! -f "${m_script_dir}/../dst_backup_cluster.sh" ]; then
+        echo "${m_script_dir}/../dst_backup_cluster.sh not found, please check."
+    fi
+    echo "Running 'backup' command"
+    ${m_script_dir}/../dst_backup_cluster.sh -C $cluster_serial_number 
+    ;;
+  *)
+    echo "Error: Unknown command '$m_command'."
+    exit 1;;
+esac
+
+# Rest of the script...
+
+
+exit 0

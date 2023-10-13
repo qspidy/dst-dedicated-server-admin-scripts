@@ -8,7 +8,7 @@ display_help() {
     echo "Usage: ./dst_backup_cluster.sh [OPTIONS]"
     echo "Options:"
     echo "  -C <cluster_serial_number>  Specify XX of folder 'Cluster_XX'"
-    echo "  -h | --help                 Show this help message."
+    echo "  -h --help                   Show this help message."
 }
 
 # Check the number of arguments

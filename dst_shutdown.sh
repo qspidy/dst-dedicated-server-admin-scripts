@@ -9,7 +9,7 @@ display_help() {
     echo "Options:"
     echo "  -C <cluster_serial_number>  Specify XX of folder 'Cluster_XX'"
     echo "  -s                          New tmux session name"
-    echo "  -h | --help                 Show this help message."
+    echo "  -h --help                   Show this help message."
 }
 
 # Check the number of arguments
@@ -66,10 +66,15 @@ tmux send-keys -t ${param_tmux_session_name}:0 "c_save()" C-m
 tmux send-keys -t ${param_tmux_session_name}:0 "c_shutdown()" C-m
 echo Closing Master...
 sleep 10
-tmux kill-window -t ${param_tmux_session_name}:1
-echo Caves windows closed.
-tmux kill-window -t ${param_tmux_session_name}:0
-echo Master windows closed.
+m_window_counts=$(tmux list-windows -t ${param_tmux_session_name} | wc -l)
+echo tmux window counts: $(tmux list-windows -t ${param_tmux_session_name} | wc -l)
+if (($m_window_counts >= 1 && $m_window_counts < 100)); then
+    for i in $(tmux list-windows -t dst-2 | grep -oE '^[0-9]+')
+    do
+        echo killing window $i
+        tmux kill-window -t ${param_tmux_session_name}:$i
+    done
+fi 
 echo "--------------------------------------------------------------------------------------"
 echo Session ${param_tmux_session_name} killed.
 

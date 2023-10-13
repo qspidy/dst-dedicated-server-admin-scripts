@@ -1,5 +1,6 @@
 #!/bin/bash
 # Default values
+g_dst_save_path=$HOME/.klei/DoNotStarveTogether
 param_cluster_serial="1"
 param_tmux_session_name="dst-1"
 
@@ -11,8 +12,8 @@ display_help() {
     echo "Usage: ./dst_start.sh [OPTIONS]"
     echo "Options:"
     echo "  -C <cluster_serial_number>  Specify XX of folder 'Cluster_XX'"
-    echo "  -s                          New tmux session name"
-    echo "  -h | --help                 Show this help message."
+    echo "  -s <session_name>           New tmux session name"
+    echo "  -h --help                   Show this help message."
 }
 
 # Check the number of arguments
@@ -61,19 +62,19 @@ echo "--------------------------------------------------------------------------
 echo "If Cluster is NEWLY UPLOADED, make sure you CHECKED cluster.ini and server.ini files manually."
 echo "--------------------------------------------------------------------------------------"
 echo Checking cluster_token.txt...
-if [ -nf "$HOME/.klei/DoNotStarveTogether/Cluster_${param_cluster_serial}/cluster_token.txt" ]; then
-    echo File "$HOME/.klei/DoNotStarveTogether/Cluster_${param_cluster_serial}/cluster_token.txt" does not exist
-    if [ -nf "$HOME/.klei/DoNotStarveTogether/cluster_token.txt" ]; then
+if [ ! -f "${g_dst_save_path}/Cluster_${param_cluster_serial}/cluster_token.txt" ]; then
+    echo File "${g_dst_save_path}/Cluster_${param_cluster_serial}/cluster_token.txt" does not exist
+    if [ ! -f "${g_dst_save_path}/cluster_token.txt" ]; then
         echo There is no cluster_token.txt on server. Please generate one on local and upload then try again.
         exit 1
     else
-        echo File "$HOME/.klei/DoNotStarveTogether/cluster_token.txt" exist
+        echo File "${g_dst_save_path}/cluster_token.txt" exist
         echo Copying to "Cluster_${param_cluster_serial}"
-        cp $HOME/.klei/DoNotStarveTogether/cluster_token.txt $HOME/.klei/DoNotStarveTogether/Cluster_${param_cluster_serial}/cluster_token.txt
+        cp ${g_dst_save_path}/cluster_token.txt ${g_dst_save_path}/Cluster_${param_cluster_serial}/cluster_token.txt
         echo Done.
     fi
 else
-    echo "$HOME/.klei/DoNotStarveTogether/Cluster_${param_cluster_serial}/cluster_token.txt" exist.
+    echo "${g_dst_save_path}/Cluster_${param_cluster_serial}/cluster_token.txt" exist.
 fi
 
 
@@ -92,6 +93,8 @@ tmux send-keys -t ${param_tmux_session_name}:0 "tmux set mouse on" C-m
 tmux send-keys -t ${param_tmux_session_name}:0 "./dst_start_cluster.sh -C ${param_cluster_serial} -m" C-m
 tmux new-window -t ${param_tmux_session_name}
 tmux send-keys -t ${param_tmux_session_name}:1 "./dst_start_cluster.sh -C ${param_cluster_serial} -c" C-m
+tmux new-window -t ${param_tmux_session_name}
+tmux send-keys -t ${param_tmux_session_name}:2 "tail -f ${g_dst_save_path}/Cluster_${param_cluster_serial}/Master/server_chat_log.txt" C-m
 echo "--------------------------------------------------------------------------------------"
 echo run "\"tmux attach -t $param_tmux_session_name\"" to interact with dst server.
 

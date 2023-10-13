@@ -21,8 +21,8 @@ display_help() {
     echo "  -C <cluster_serial_number>  Specify XX of folder 'Cluster_XX'"
     echo "  -m                          Start Cluster Master"
     echo "  -c                          Start Cluster Caves"
-    echo "  -n | --no_auto_restart      Do not auto restart server when crashed or stopped"
-    echo "  -h | --help                 Show this help message."
+    echo "  -n --no_auto_restart        Do not auto restart server when crashed or stopped"
+    echo "  -h --help                   Show this help message."
 }
 
 server_run() {
@@ -32,7 +32,7 @@ server_run() {
     # backup
     if [ "$param_cluster_type" = "Master" ]; then
         if [ -f "${m_script_dir}/dst_backup_cluster.sh" ]; then
-            $HOME/dst_backup_cluster.sh -C $param_cluster_serial
+            ${m_script_dir}/dst_backup_cluster.sh -C $param_cluster_serial
         else
             echo "File ${m_script_dir}/dst_backup_cluster.sh does not exist."
         fi
