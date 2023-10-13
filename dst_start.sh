@@ -3,6 +3,9 @@
 param_cluster_serial="1"
 param_tmux_session_name="dst-1"
 
+# Get the directory path of the script
+m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
 # Function to display help message
 display_help() {
     echo "Usage: ./dst_start.sh [OPTIONS]"
@@ -73,20 +76,22 @@ else
     echo "$HOME/.klei/DoNotStarveTogether/Cluster_${param_cluster_serial}/cluster_token.txt" exist.
 fi
 
+
 echo "SessionInfo---------------------------------------------------------------------------"
 echo tmux session name: ${param_tmux_session_name}
 echo cluster serial number: ${param_cluster_serial}
 echo "--------------------------------------------------------------------------------------"
 # update modlist and mods
-$HOME/dst_update_modlist.sh ${param_cluster_serial}
-$HOME/dst_update.sh
+${m_script_dir}/dst_update_modlist.sh ${param_cluster_serial}
+${m_script_dir}/dst_update.sh
 
 # start server in tmux
+cd $m_script_dir
 tmux new-session -s ${param_tmux_session_name} -d
 tmux send-keys -t ${param_tmux_session_name}:0 "tmux set mouse on" C-m
-tmux send-keys -t ${param_tmux_session_name}:0 "$HOME/dst_start_cluster.sh -C ${param_cluster_serial} -m" C-m
+tmux send-keys -t ${param_tmux_session_name}:0 "./dst_start_cluster.sh -C ${param_cluster_serial} -m" C-m
 tmux new-window -t ${param_tmux_session_name}
-tmux send-keys -t ${param_tmux_session_name}:1 "$HOME/dst_start_cluster.sh -C ${param_cluster_serial} -c" C-m
+tmux send-keys -t ${param_tmux_session_name}:1 "./dst_start_cluster.sh -C ${param_cluster_serial} -c" C-m
 echo "--------------------------------------------------------------------------------------"
 echo run "\"tmux attach -t $param_tmux_session_name\"" to interact with dst server.
 

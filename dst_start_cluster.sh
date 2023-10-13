@@ -11,6 +11,8 @@ g_dst_save_path=$HOME/.klei/DoNotStarveTogether
 param_cluster_serial="1"
 param_cluster_type="Master"
 param_cluster_auto_restart=true
+# Get the directory path of the script
+m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Function to display help message
 display_help() {
@@ -29,10 +31,10 @@ server_run() {
     echo "Backup----------------------------------------------------------------------------"
     # backup
     if [ "$param_cluster_type" = "Master" ]; then
-        if [ -f "$HOME/dst_backup_cluster.sh" ]; then
+        if [ -f "${m_script_dir}/dst_backup_cluster.sh" ]; then
             $HOME/dst_backup_cluster.sh -C $param_cluster_serial
         else
-            echo "File $HOME/dst_backup_cluster.sh does not exist."
+            echo "File ${m_script_dir}/dst_backup_cluster.sh does not exist."
         fi
         cp ${g_dst_save_path}/Cluster_${param_cluster_serial}/${param_cluster_type}/server_chat_log.txt ${g_dst_save_path}/Cluster_${param_cluster_serial}_$(date +%Y-%-m-%-d-%-H-%-M-%-S)_server_chat_log.txt
     fi
@@ -40,7 +42,7 @@ server_run() {
     echo "----------------------------------------------------------------------------------"
     # server start
     echo "ServerStart-----------------------------------------------------------------------"
-    cd ~/steamapps/DST/bin
+    cd $HOME/steamapps/DST/bin
     ./dontstarve_dedicated_server_nullrenderer -console -cluster Cluster_${param_cluster_serial} -shard ${param_cluster_type}
     
     echo "----------------------------------------------------------------------------------"
@@ -98,7 +100,7 @@ if [ "$param_cluster_auto_restart" ]; then
         # server down
         echo "----------------------------------------------------------------------------------"
         echo "Server crashed or stopped. Restart in 10 seconds..."
-        $HOME/update_dst.sh
+        ${m_script_dir}/dst_update.sh
         sleep 10  # Wait for 5 seconds before restarting
     done
 
