@@ -7,3 +7,6 @@
 - [dst_update.sh] --update dedicated server and mods
 - [dst_shutdown.sh] --shutdown tmux with server
 - [dst_start.sh] --start tmux with server (include master and caves)
+- [dst_auto_restart_caves.sh] --Deprecated!
+- [dst_auto_restart_master.sh] --Deprecated!
+
