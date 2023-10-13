@@ -10,3 +10,6 @@
 - [dst_auto_restart_caves.sh] --Deprecated!
 - [dst_auto_restart_master.sh] --Deprecated!
 
+## Tips
+
+- Better eating experience with [this](orange.wastaken.xyz/2023/10/13/dst-dedicate-server-start/)
