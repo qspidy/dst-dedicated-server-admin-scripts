@@ -11,4 +11,4 @@
 - [dst_auto_restart_master.sh] --Deprecated!
 
 ## Tips
-- Better way to have these scripts with [this](https://orange.wastaken.xyz/2023/10/13/dst-dedicate-server-start/)
+- Better eating experence with [this](https://orange.wastaken.xyz/2023/10/13/dst-dedicate-server-start/)
