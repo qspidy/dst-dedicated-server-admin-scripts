@@ -12,4 +12,4 @@
 
 ## Tips
 
-- Better eating experience with [this](orange.wastaken.xyz/2023/10/13/dst-dedicate-server-start/)
+- Better eating experience with [this](https://orange.wastaken.xyz/2023/10/13/dst-dedicate-server-start/)
