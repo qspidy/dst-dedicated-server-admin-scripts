@@ -81,10 +81,11 @@ fi
 echo "SessionInfo---------------------------------------------------------------------------"
 echo tmux session name: ${param_tmux_session_name}
 echo cluster serial number: ${param_cluster_serial}
-echo "--------------------------------------------------------------------------------------"
+echo "UpdateServerMods----------------------------------------------------------------------"
 # update modlist and mods
 ${m_script_dir}/dst_update_modlist.sh ${param_cluster_serial}
 ${m_script_dir}/dst_update.sh
+echo "--------------------------------------------------------------------------------------"
 
 # start server in tmux
 cd $m_script_dir

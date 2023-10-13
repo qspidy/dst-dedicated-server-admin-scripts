@@ -37,6 +37,7 @@ while [[ $# -gt 0 ]]; do
       # cluster_serial_number
       shift
       param_cluster_serial=$1
+      param_tmux_session_name="dst-${1}"
       if [[ ! $param_cluster_serial =~ ^[0-9]+$ ]]; then
         echo "Paramater of "-C" should number, please check."
         exit 1
@@ -82,8 +83,8 @@ case $m_command in
     if [ ! -f "${m_script_dir}/../dst_start.sh" ]; then
         echo "${m_script_dir}/../dst_start.sh not found, please check."
     fi
-    echo "Running 'command' command"
-    ${m_script_dir}/../dst_start.sh -C $cluster_serial_number -s $param_tmux_session_name
+    echo "Running 'dst_start.sh' command"
+    ${m_script_dir}/../dst_start.sh -C $param_cluster_serial -s $param_tmux_session_name
     ;;
   shutdown)
     # Code to perform the 'shutdown' command
@@ -91,7 +92,7 @@ case $m_command in
         echo "${m_script_dir}/../dst_shutdown.sh not found, please check."
     fi
     echo "Running 'shutdown' command"
-    ${m_script_dir}/../dst_shutdown.sh -C $cluster_serial_number -s $param_tmux_session_name
+    ${m_script_dir}/../dst_shutdown.sh -C $param_cluster_serial -s $param_tmux_session_name
     ;;
   update)
     # Code to perform the 'update' command
@@ -99,7 +100,7 @@ case $m_command in
         echo "${m_script_dir}/../dst_update_modlist.sh not found, please check."
     fi
     echo "Running 'update' command"
-    ${m_script_dir}/../dst_update_modlist.sh $cluster_serial_number
+    ${m_script_dir}/../dst_update_modlist.sh $param_cluster_serial
     ;;
   upgrade)
     # Code to perform the 'upgrade' command
@@ -115,7 +116,7 @@ case $m_command in
         echo "${m_script_dir}/../dst_backup_cluster.sh not found, please check."
     fi
     echo "Running 'backup' command"
-    ${m_script_dir}/../dst_backup_cluster.sh -C $cluster_serial_number 
+    ${m_script_dir}/../dst_backup_cluster.sh -C $param_cluster_serial 
     ;;
   *)
     echo "Error: Unknown command '$m_command'."
