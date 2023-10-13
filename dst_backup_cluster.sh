@@ -26,6 +26,10 @@ while [[ $# -gt 0 ]]; do
         -C)
             shift
             # param_C_value="$1"
+            if [[ "$1" == "0" ]]; then
+                echo "Please set cluster serial number."
+                exit 1
+            fi
             param_cluster_serial="$1"
             # echo "Performing action for -C parameter."
             # Add your desired action for -C parameter here
