@@ -24,6 +24,8 @@ display_help() {
     echo "  update      Update modlist"
     echo "  upgrade     Update server and mods"
     echo "  backup      Backup Cluster folder"
+    echo "  info        cat cluster.ini of Cluster_xx"
+
 }
 
 # Parse command line options and arguments
@@ -117,6 +119,14 @@ case $m_command in
     fi
     echo "Running 'backup' command"
     ${m_script_dir}/../dst_backup_cluster.sh -C $param_cluster_serial 
+    ;;
+  info)
+    # Code to perform the 'info' command
+    if [ ! -f "${m_script_dir}/../dst_show_info.sh" ]; then
+        echo "${m_script_dir}/../dst_show_info.sh not found, please check."
+    fi
+    echo "Running 'info' command"
+    ${m_script_dir}/../dst_show_info.sh -C $param_cluster_serial 
     ;;
   *)
     echo "Error: Unknown command '$m_command'."
