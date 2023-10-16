@@ -25,6 +25,7 @@ display_help() {
     echo "  upgrade     Update server and mods"
     echo "  backup      Backup Cluster folder"
     echo "  info        cat cluster.ini of Cluster_xx"
+    echo "  status      attach to tmux of Cluster_xx"
 
 }
 
@@ -127,6 +128,14 @@ case $m_command in
     fi
     echo "Running 'info' command"
     ${m_script_dir}/../dst_show_info.sh -C $param_cluster_serial 
+    ;;
+  status)
+    # Code to perform the 'status' command
+    if [ ! -f "${m_script_dir}/../dst_status.sh" ]; then
+        echo "${m_script_dir}/../dst_status.sh not found, please check."
+    fi
+    echo "Running 'status' command"
+    ${m_script_dir}/../dst_status.sh -C $param_cluster_serial 
     ;;
   *)
     echo "Error: Unknown command '$m_command'."

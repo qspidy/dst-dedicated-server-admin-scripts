@@ -1,8 +1,8 @@
 #!/bin/bash
 # Default values
 g_dst_save_path=$HOME/.klei/DoNotStarveTogether
-param_cluster_serial="1"
-param_tmux_session_name="dst-1"
+param_cluster_serial="0"
+param_tmux_session_name="dst-0"
 
 # Get the directory path of the script
 m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"

@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# Get the directory path of the script
+m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
 # grant exec rights
-chmod +x dst_*
-chmod +x albin/*
+chmod +x ${m_script_dir}/dst_*
+chmod +x ${m_script_dir}/albin/*
 
 # add albin to PATH
-albin_directory=$(pwd)/albin
+albin_directory=${m_script_dir}/albin
 
 # Check if the directory exists
 if [ -d "$albin_directory" ]; then
@@ -25,6 +28,10 @@ if [ -d "$albin_directory" ]; then
     fish)
       echo "set PATH \"$albin_directory\" \$PATH" >> ~/.config/fish/config.fish
       echo "albin directory added to PATH for Fish."
+      # and auto completion
+      # complete -c al_dstserver -d "discription like 'start server'" -f -a 'start' -x
+
+      complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status' -x
       ;;
     *)
       echo "Unsupported shell: $albin_directory. Please manually add the directory to the appropriate shell configuration file."
