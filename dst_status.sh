@@ -62,6 +62,6 @@ done
 
 # Additional code or actions can be added here
 # attach to tmux
-tmux attach -s $param_tmux_session_name
+tmux attach -t $param_tmux_session_name
 
 exit 0

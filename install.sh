@@ -26,12 +26,13 @@ if [ -d "$albin_directory" ]; then
       echo "albin directory added to PATH for Zsh."
       ;;
     fish)
-      echo "set PATH \"$albin_directory\" \$PATH" >> ~/.config/fish/config.fish
+      echo "set PATH \"$albin_directory\":\$PATH" >> ~/.config/fish/config.fish
       echo "albin directory added to PATH for Fish."
       # and auto completion
       # complete -c al_dstserver -d "discription like 'start server'" -f -a 'start' -x
 
-      complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status' -x
+      echo "complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status' -x" >> ~/.config/fish/config.fish
+      echo "completion added"
       ;;
     *)
       echo "Unsupported shell: $albin_directory. Please manually add the directory to the appropriate shell configuration file."
