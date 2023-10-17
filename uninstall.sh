@@ -5,7 +5,7 @@
 m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # revoke exec rights
-chmod -x ${m_script_dir}/dst_*
+chmod -x ${m_script_dir}/*.sh
 chmod -x ${m_script_dir}/albin/*
 echo Exection rights revoked.
 
@@ -32,7 +32,7 @@ remove_from_fish() {
   # sed -i "/set PATH \"$albin_directory\":\\\$PATH/d" ~/.config/fish/config.fish
   # sed -i '\|set PATH "'"$albin_directory"':\$PATH"|d' ~/.config/fish/config.fish
   sed -i '/set PATH ".*\/albin":\$PATH/d' ~/.config/fish/config.fish
-  sed -i '/complete -c al_dstserver -f -a '\''start shutdown info update upgrate backup status'\'' -x/d' ~/.config/fish/config.fish
+  sed -i '/complete -c al_dstserver -f -a/d' ~/.config/fish/config.fish
 }
 
 # Check the default shell and remove the directory from the appropriate shell configuration file

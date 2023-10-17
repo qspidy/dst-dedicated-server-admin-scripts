@@ -9,7 +9,7 @@ m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Function to display help message
 display_help() {
-    echo "Usage: ./dst_start.sh [OPTIONS]"
+    echo "Usage: $0 [OPTIONS]"
     echo "Options:"
     echo "  -C <cluster_serial_number>  Specify XX of folder 'Cluster_XX'"
     echo "  -s <session_name>           New tmux session name"

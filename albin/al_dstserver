@@ -26,6 +26,7 @@ display_help() {
     echo "  backup      Backup Cluster folder"
     echo "  info        cat cluster.ini of Cluster_xx"
     echo "  status      attach to tmux of Cluster_xx"
+    echo "  list        list all Cluster_xx's basic info, use 'info' command to show more"
 
 }
 
@@ -85,6 +86,7 @@ case $m_command in
     # Code to perform the 'start' command
     if [ ! -f "${m_script_dir}/../dst_start.sh" ]; then
         echo "${m_script_dir}/../dst_start.sh not found, please check."
+        exit 1
     fi
     echo "Running 'dst_start.sh' command"
     ${m_script_dir}/../dst_start.sh -C $param_cluster_serial -s $param_tmux_session_name
@@ -93,6 +95,7 @@ case $m_command in
     # Code to perform the 'shutdown' command
     if [ ! -f "${m_script_dir}/../dst_shutdown.sh" ]; then
         echo "${m_script_dir}/../dst_shutdown.sh not found, please check."
+        exit 1
     fi
     echo "Running 'shutdown' command"
     ${m_script_dir}/../dst_shutdown.sh -C $param_cluster_serial -s $param_tmux_session_name
@@ -101,6 +104,7 @@ case $m_command in
     # Code to perform the 'update' command
     if [ ! -f "${m_script_dir}/../dst_update_modlist.sh" ]; then
         echo "${m_script_dir}/../dst_update_modlist.sh not found, please check."
+        exit 1
     fi
     echo "Running 'update' command"
     ${m_script_dir}/../dst_update_modlist.sh $param_cluster_serial
@@ -109,6 +113,7 @@ case $m_command in
     # Code to perform the 'upgrade' command
     if [ ! -f "${m_script_dir}/../dst_update.sh" ]; then
         echo "${m_script_dir}/../dst_update.sh not found, please check."
+        exit 1
     fi
     echo "Running 'upgrade' command"
     ${m_script_dir}/../dst_update.sh 
@@ -117,6 +122,7 @@ case $m_command in
     # Code to perform the 'backup' command
     if [ ! -f "${m_script_dir}/../dst_backup_cluster.sh" ]; then
         echo "${m_script_dir}/../dst_backup_cluster.sh not found, please check."
+        exit 1
     fi
     echo "Running 'backup' command"
     ${m_script_dir}/../dst_backup_cluster.sh -C $param_cluster_serial 
@@ -125,6 +131,7 @@ case $m_command in
     # Code to perform the 'info' command
     if [ ! -f "${m_script_dir}/../dst_show_info.sh" ]; then
         echo "${m_script_dir}/../dst_show_info.sh not found, please check."
+        exit 1
     fi
     echo "Running 'info' command"
     ${m_script_dir}/../dst_show_info.sh -C $param_cluster_serial 
@@ -133,9 +140,19 @@ case $m_command in
     # Code to perform the 'status' command
     if [ ! -f "${m_script_dir}/../dst_status.sh" ]; then
         echo "${m_script_dir}/../dst_status.sh not found, please check."
+        exit 1
     fi
     echo "Running 'status' command"
     ${m_script_dir}/../dst_status.sh -C $param_cluster_serial 
+    ;;
+  list)
+    # Code to perform the 'list' command
+    if [ ! -f "${m_script_dir}/../dst_list.sh" ]; then
+        echo "${m_script_dir}/../dst_list.sh not found, please check."
+        exit 1
+    fi
+    echo "Running 'list' command"
+    ${m_script_dir}/../dst_list.sh
     ;;
   *)
     echo "Error: Unknown command '$m_command'."

@@ -4,7 +4,7 @@
 m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # grant exec rights
-chmod +x ${m_script_dir}/dst_*
+chmod +x ${m_script_dir}/*.sh
 chmod +x ${m_script_dir}/albin/*
 
 # add albin to PATH
@@ -31,7 +31,7 @@ if [ -d "$albin_directory" ]; then
       # and auto completion
       # complete -c al_dstserver -d "discription like 'start server'" -f -a 'start' -x
 
-      echo "complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status' -x" >> ~/.config/fish/config.fish
+      echo "complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status list' -x" >> ~/.config/fish/config.fish
       echo "completion added"
       ;;
     *)
