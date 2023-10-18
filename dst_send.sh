@@ -3,6 +3,7 @@
 g_dst_save_path=$HOME/.klei/DoNotStarveTogether
 param_cluster_serial="0"
 param_tmux_session_name="dst-0"
+param_cluster_type="Master"
 m_send_command=""
 
 # Get the directory path of the script
@@ -14,6 +15,8 @@ display_help() {
     echo "Options:"
     echo "  -C <cluster_serial_number>  Specify XX of folder 'Cluster_XX'"
     echo "  -s <session_name>           New tmux session name"
+    echo "  -m                          Select Cluster Master"
+    echo "  -c                          Select Cluster Caves"
     echo "  -h --help                   Show this help message."
 }
 
@@ -38,6 +41,12 @@ while [[ $# -gt 0 ]]; do
         exit 1
       fi
       ;;
+    -c)
+        param_cluster_type="Caves"
+        ;;
+    -m)
+        param_cluster_type="Master"
+        ;;
     -s)
       # session_name
       shift
@@ -69,7 +78,11 @@ fi
 # Perform actions based on the specified command
 
 # Perform actions based on the options
-${m_script_dir}/albin/tmux_send.al ${param_tmux_session_name}:0 "$m_command"
+if [[ $param_cluster_type == "Caves" ]]; then
+  ${m_script_dir}/albin/tmux_send.al ${param_tmux_session_name}:1 "$m_command"
+else
+  ${m_script_dir}/albin/tmux_send.al ${param_tmux_session_name}:0 "$m_command"
+fi
 
 # Additional code or actions can be added here
 

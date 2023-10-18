@@ -122,9 +122,14 @@ case $m_command in
   listallplayers)
     echo sending "c_listallplayers()"
     echo -------------------------------------
+    echo Master world players list:
     ${m_script_dir}/dst_send.sh -s $param_tmux_session_name "c_listallplayers()" \
-    && tail ${g_dst_save_path}/Cluster_${param_cluster_serial}/Master/server_log.txt -n 30 \
-    | grep -oE "\[[0-9]{1}].*" | uniq
+    && sleep 1 && tail ${g_dst_save_path}/Cluster_${param_cluster_serial}/Master/server_log.txt -n 30 \
+    | grep -oE "\[[0-9]{1}] \(KU.*" | sort | uniq
+    echo Caves players list:
+    ${m_script_dir}/dst_send.sh -s $param_tmux_session_name -c "c_listallplayers()" \
+    && sleep 1 && tail ${g_dst_save_path}/Cluster_${param_cluster_serial}/Caves/server_log.txt -n 30 \
+    | grep -oE "\[[0-9]{1}] \(KU.*" | sort | uniq
     echo -------------------------------------
     echo Done.
     ;;
