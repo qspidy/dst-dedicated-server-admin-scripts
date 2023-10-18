@@ -32,7 +32,7 @@ remove_from_fish() {
   # sed -i "/set PATH \"$albin_directory\":\\\$PATH/d" ~/.config/fish/config.fish
   # sed -i '\|set PATH "'"$albin_directory"':\$PATH"|d' ~/.config/fish/config.fish
   sed -i '/set PATH ".*\/albin":\$PATH/d' ~/.config/fish/config.fish
-  sed -i '/complete -c al_dstserver -f -a/d' ~/.config/fish/config.fish
+  sed -i '/complete -c al_dstserver/d' ~/.config/fish/config.fish
 }
 
 # Check the default shell and remove the directory from the appropriate shell configuration file

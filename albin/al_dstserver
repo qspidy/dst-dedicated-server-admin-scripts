@@ -19,14 +19,17 @@ display_help() {
     echo "  -c --caves                  Select Caves Cluster"
     echo "  -h --help                   Display this help message"
     echo "Commands:"
-    echo "  start       Start server for Cluster_xx"
-    echo "  shutdown    Shutdown tmux and server for Cluster_xx"
-    echo "  update      Update modlist"
-    echo "  upgrade     Update server and mods"
-    echo "  backup      Backup Cluster folder"
-    echo "  info        cat cluster.ini of Cluster_xx"
-    echo "  status      attach to tmux of Cluster_xx"
-    echo "  list        list all Cluster_xx's basic info, use 'info' command to show more"
+    echo "  start                 Start server for Cluster_xx"
+    echo "  shutdown              Shutdown tmux and server for Cluster_xx"
+    echo "  update                Update modlist"
+    echo "  upgrade               Update server and mods"
+    echo "  backup                Backup Cluster folder"
+    echo "  info                  cat cluster.ini of Cluster_xx"
+    echo "  status                attach to tmux of Cluster_xx"
+    echo "  list                  list all Cluster_xx's basic info, use 'info' command to show more"
+    echo "  send <command>        send server command to a running cluster,e.g. send 'c_save()'"
+    echo "  send_preset <command> send server command to a running cluster,e.g. send save "
+    echo "                        run 'send list' to show commands you can use and how.   "
 
 }
 
@@ -153,6 +156,24 @@ case $m_command in
     fi
     echo "Running 'list' command"
     ${m_script_dir}/../dst_list.sh
+    ;;
+  send)
+    # Code to perform the 'send' command
+    if [ ! -f "${m_script_dir}/../dst_send.sh" ]; then
+        echo "${m_script_dir}/../dst_send.sh not found, please check."
+        exit 1
+    fi
+    echo "Running 'send' command"
+    ${m_script_dir}/../dst_send.sh -C $param_cluster_serial -s $param_tmux_session_name $m_argument
+    ;;
+  send_preset)
+    # Code to perform the 'send_preset' command
+    if [ ! -f "${m_script_dir}/../dst_send_preset.sh" ]; then
+        echo "${m_script_dir}/../dst_send_preset.sh not found, please check."
+        exit 1
+    fi
+    echo "Running 'send_preset' command"
+    ${m_script_dir}/../dst_send_preset.sh -C $param_cluster_serial -s $param_tmux_session_name $m_argument
     ;;
   *)
     echo "Error: Unknown command '$m_command'."

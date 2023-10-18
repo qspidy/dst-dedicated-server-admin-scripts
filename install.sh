@@ -2,6 +2,15 @@
 
 # Get the directory path of the script
 m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+m_complete_sub_prefix="complete -c al_dstserver -n '__fish_seen_subcommand_from al_dstserver send_preset' -f"
+
+# uninstall old version
+chmod +x ${m_script_dir}/uninstall.sh
+if [ ! -f "${m_script_dir}/uninstall.sh" ]; then
+  echo "${m_script_dir}/uninstall.sh not found, please check."
+  exit 1
+fi
+${m_script_dir}/uninstall.sh
 
 # grant exec rights
 chmod +x ${m_script_dir}/*.sh
@@ -31,7 +40,16 @@ if [ -d "$albin_directory" ]; then
       # and auto completion
       # complete -c al_dstserver -d "discription like 'start server'" -f -a 'start' -x
 
-      echo "complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status list' -x" >> ~/.config/fish/config.fish
+      echo "complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status list send send_preset' -x" >> ~/.config/fish/config.fish
+      # echo "complete -c al_dstserver -n '__fish_seen_subcommand_from al_dstserver_send_preset' -a 'save kick ban'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'save' -d 'save'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'shutdown' -d 'shutdown'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'regenerateworld' -d 'regenerateworld'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'listallplayers' -d 'listallplayers'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'present_info' -d 'present_info'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'kick' -d 'kick <username>|<userid>'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'ban' -d 'ban <username>|<userid>'" >> ~/.config/fish/config.fish
+      echo "$m_complete_sub_prefix -a 'announce' -d 'announce \"anything to say\"'" >> ~/.config/fish/config.fish
       echo "completion added"
       ;;
     *)
