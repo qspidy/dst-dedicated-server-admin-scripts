@@ -40,7 +40,7 @@ if [ -d "$albin_directory" ]; then
       # and auto completion
       # complete -c al_dstserver -d "discription like 'start server'" -f -a 'start' -x
 
-      echo "complete -c al_dstserver -f -a 'start shutdown info update upgrate backup status list send send_preset' -x" >> ~/.config/fish/config.fish
+      echo "complete -c al_dstserver -f -a 'start shutdown info update upgrade backup status list send send_preset' -x" >> ~/.config/fish/config.fish
       # echo "complete -c al_dstserver -n '__fish_seen_subcommand_from al_dstserver_send_preset' -a 'save kick ban'" >> ~/.config/fish/config.fish
       echo "$m_complete_sub_prefix -a 'save' -d 'save'" >> ~/.config/fish/config.fish
       echo "$m_complete_sub_prefix -a 'shutdown' -d 'shutdown'" >> ~/.config/fish/config.fish
