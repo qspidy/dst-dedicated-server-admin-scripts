@@ -4,11 +4,13 @@ g_dst_save_path=$HOME/.klei/DoNotStarveTogether
 param_cluster_serial="0"
 param_tmux_session_name="dst-0"
 m_command=""
-m_arg1=""
-m_arg2=""
+m_args=""
 
 # Get the directory path of the script
-m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+# m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)/.."
+m_script_dir="$(dirname "$(readlink -f "$0")")/.."
+
+
 
 # Function to display help message
 display_help() {
@@ -31,158 +33,174 @@ display_help() {
     echo "  send <command>        send server command to a running cluster,e.g. send 'c_save()'"
     echo "  send_preset <command> send server command to a running cluster,e.g. send save "
     echo "                        run 'send list' to show commands you can use and how.   "
-
 }
 
-# Parse command line options and arguments
+log_error() {
+    echo "Error: $1"
+    exit 1
+}
+
+log_info() {
+    echo "Info: $1"
+}
+
+# Function to parse command-line arguments
+parse_arguments() {
 while [[ $# -gt 0 ]]; do
-  case $1 in
-    -h|--help)
-      # Display help message
-      display_help
-      exit;;
-    -C)
-      # cluster_serial_number
-      shift
-      param_cluster_serial=$1
-      param_tmux_session_name="dst-${1}"
-      if [[ ! $param_cluster_serial =~ ^[0-9]+$ ]]; then
-        echo "Paramater of "-C" should number, please check."
-        exit 1
-      fi
-      if (( ! $param_cluster_serial>=1 && $param_cluster_serial<100 )); then
-        echo "Maybe the cluster serial num range 1~100, please check."
-        exit 1
-      fi
-      ;;
-    -s)
-      # session_name
-      shift
-      param_tmux_session_name=$1
-      ;;
-    -m)
-      # developing
-      ;;
-    -c)
-      # developing
-      ;;
-    *)
-      # Capture the command and argument
-      m_command=$1
-      m_arg1=$2
-      m_arg2=$3
-      break;;
-  esac
-  shift
-done
+    case $1 in
+      -h|--help)
+        # Display help message
+        display_help
+        exit 0
+        ;;
+      -C)
+        # cluster_serial_number
+        shift
+        param_cluster_serial=$1
+        param_tmux_session_name="dst-${1}"
+        if [[ ! $param_cluster_serial =~ ^[0-9]+$ ]]; then
+          log_error "Paramater of '-C' should number, please check."
+        fi
+        if (( param_cluster_serial < 1 || param_cluster_serial >= 100 )); then
+          log_error "Cluster serial num should be in the range 1~99, please check."
+        fi
+        ;;
+      -s)
+        # session_name
+        shift
+        param_tmux_session_name=$1
+        ;;
+      -m)
+        # developing
+        ;;
+      -c)
+        # developing
+        ;;
+      *)
+        # Capture the command and argument
+        m_command=$1
+        shift
+        m_args=$@
+        break;;
+    esac
+    shift
+  done
+}
 
-# echo command: $m_command
-# echo argu: $m_arg1
-# Check if command argument is provided
-if [ -z "$m_command" ]; then
-  echo "Error: Command argument is required."
-  display_help
-  exit 1
-fi
-
-# Perform actions based on the specified command
-case $m_command in
-  start)
-    # Code to perform the 'start' command
-    if [ ! -f "${m_script_dir}/../dst_start.sh" ]; then
-        echo "${m_script_dir}/../dst_start.sh not found, please check."
-        exit 1
-    fi
+# Function to run the 'start' command
+run_start_command() {
+    start_script="${m_script_dir}/dst_start.sh"
+    check_script_existence "$start_script"
     echo "Running 'dst_start.sh' command"
-    ${m_script_dir}/../dst_start.sh -C $param_cluster_serial -s $param_tmux_session_name
-    ;;
-  shutdown)
-    # Code to perform the 'shutdown' command
-    if [ ! -f "${m_script_dir}/../dst_shutdown.sh" ]; then
-        echo "${m_script_dir}/../dst_shutdown.sh not found, please check."
-        exit 1
-    fi
+    "$start_script" -C $param_cluster_serial -s $param_tmux_session_name
+}
+
+# Function to run the 'shutdown' command
+run_shutdown_command() {
+    shutdown_script="${m_script_dir}/dst_shutdown.sh"
+    check_script_existence "$shutdown_script"
     echo "Running 'shutdown' command"
-    ${m_script_dir}/../dst_shutdown.sh -C $param_cluster_serial -s $param_tmux_session_name
-    ;;
-  update)
-    # Code to perform the 'update' command
-    if [ ! -f "${m_script_dir}/../dst_update_modlist.sh" ]; then
-        echo "${m_script_dir}/../dst_update_modlist.sh not found, please check."
-        exit 1
-    fi
+    "$shutdown_script" -C $param_cluster_serial -s $param_tmux_session_name
+}
+
+# Function to run the 'update' command
+run_update_command() {
+    update_script="${m_script_dir}/dst_update_modlist.sh"
+    check_script_existence "$update_script"
     echo "Running 'update' command"
-    ${m_script_dir}/../dst_update_modlist.sh $param_cluster_serial
-    ;;
-  upgrade)
-    # Code to perform the 'upgrade' command
-    if [ ! -f "${m_script_dir}/../dst_update.sh" ]; then
-        echo "${m_script_dir}/../dst_update.sh not found, please check."
-        exit 1
-    fi
+    "$update_script" $param_cluster_serial
+}
+
+# Function to run the 'upgrade' command
+run_upgrade_command() {
+    upgrade_script="${m_script_dir}/dst_update.sh"
+    check_script_existence "$upgrade_script"
     echo "Running 'upgrade' command"
-    ${m_script_dir}/../dst_update.sh 
-    ;;
-  backup)
-    # Code to perform the 'backup' command
-    if [ ! -f "${m_script_dir}/../dst_backup_cluster.sh" ]; then
-        echo "${m_script_dir}/../dst_backup_cluster.sh not found, please check."
-        exit 1
-    fi
+    "$upgrade_script"
+}
+
+# Function to run the 'backup' command
+run_backup_command() {
+    backup_script="${m_script_dir}/dst_backup_cluster.sh"
+    check_script_existence "$backup_script"
     echo "Running 'backup' command"
-    ${m_script_dir}/../dst_backup_cluster.sh -C $param_cluster_serial 
-    ;;
-  info)
-    # Code to perform the 'info' command
-    if [ ! -f "${m_script_dir}/../dst_show_info.sh" ]; then
-        echo "${m_script_dir}/../dst_show_info.sh not found, please check."
-        exit 1
-    fi
+    "$backup_script" -C $param_cluster_serial
+}
+
+# Function to run the 'info' command
+run_info_command() {
+    info_script="${m_script_dir}/dst_show_info.sh"
+    check_script_existence "$info_script"
     echo "Running 'info' command"
-    ${m_script_dir}/../dst_show_info.sh -C $param_cluster_serial 
-    ;;
-  status)
-    # Code to perform the 'status' command
-    if [ ! -f "${m_script_dir}/../dst_status.sh" ]; then
-        echo "${m_script_dir}/../dst_status.sh not found, please check."
-        exit 1
-    fi
+    "$info_script" -C $param_cluster_serial
+}
+
+# Function to run the 'status' command
+run_status_command() {
+    status_script="${m_script_dir}/dst_status.sh"
+    check_script_existence "$status_script"
     echo "Running 'status' command"
-    ${m_script_dir}/../dst_status.sh -C $param_cluster_serial 
-    ;;
-  list)
-    # Code to perform the 'list' command
-    if [ ! -f "${m_script_dir}/../dst_list.sh" ]; then
-        echo "${m_script_dir}/../dst_list.sh not found, please check."
-        exit 1
-    fi
+    "$status_script" -C $param_cluster_serial
+}
+
+# Function to run the 'list' command
+run_list_command() {
+    list_script="${m_script_dir}/dst_list.sh"
+    check_script_existence "$list_script"
     echo "Running 'list' command"
-    ${m_script_dir}/../dst_list.sh
-    ;;
-  send)
-    # Code to perform the 'send' command
-    if [ ! -f "${m_script_dir}/../dst_send.sh" ]; then
-        echo "${m_script_dir}/../dst_send.sh not found, please check."
-        exit 1
-    fi
+    "$list_script"
+}
+
+# Function to run the 'send' command
+run_send_command() {
+    send_script="${m_script_dir}/dst_send.sh"
+    check_script_existence "$send_script"
     echo "Running 'send' command"
-    ${m_script_dir}/../dst_send.sh -C $param_cluster_serial -s $param_tmux_session_name $m_arg1
-    ;;
-  send_preset)
-    # Code to perform the 'send_preset' command
-    if [ ! -f "${m_script_dir}/../dst_send_preset.sh" ]; then
-        echo "${m_script_dir}/../dst_send_preset.sh not found, please check."
-        exit 1
-    fi
+    "$send_script" -C $param_cluster_serial -s $param_tmux_session_name $m_args
+}
+
+# Function to run the 'send_preset' command
+run_send_preset_command() {
+    send_preset_script="${m_script_dir}/dst_send_preset.sh"
+    check_script_existence "$send_preset_script"
     echo "Running 'send_preset' command"
-    ${m_script_dir}/../dst_send_preset.sh -C $param_cluster_serial -s $param_tmux_session_name $m_arg1 $m_arg2
-    ;;
-  *)
-    echo "Error: Unknown command '$m_command'."
-    exit 1;;
-esac
+    "$send_preset_script" -C $param_cluster_serial -s $param_tmux_session_name $m_args
+}
 
-# Rest of the script...
+# Function to check if a script exists, otherwise exit with an error message
+check_script_existence() {
+    if [ ! -f "$1" ]; then
+        log_error "$1 not found, please check."
+    fi
+}
+
+parse_commands() {
+  # Perform actions based on the specified command
+  case $m_command in
+      start) run_start_command ;;
+      shutdown) run_shutdown_command ;;
+      update) run_update_command ;;
+      upgrade) run_upgrade_command ;;
+      backup) run_backup_command ;;
+      info) run_info_command ;;
+      status) run_status_command ;;
+      list) run_list_command ;;
+      send) run_send_command ;;
+      send_preset) run_send_preset_command ;;
+      *)
+          log_error "Error: Unknown command '$m_command'."
+          exit 1;;
+  esac
+}
 
 
-exit 0
+# Main function
+main() {
+    parse_arguments "$@"
+    parse_commands
+    
+}
+
+# Invoke main function with command-line arguments
+main "$@"
+
