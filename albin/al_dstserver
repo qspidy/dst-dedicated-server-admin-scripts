@@ -8,7 +8,7 @@ m_args=""
 
 # Get the directory path of the script
 # m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)/.."
-m_script_dir="$(dirname "$(readlink -f "$0")")/.."
+m_script_dir="$(dirname "$(readlink -f "$0")")/../lib"
 
 
 
