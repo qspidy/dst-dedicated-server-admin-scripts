@@ -4,7 +4,8 @@ g_dst_save_path=$HOME/.klei/DoNotStarveTogether
 param_cluster_serial="0"
 param_tmux_session_name="dst-0"
 m_command=""
-m_argument=""
+m_arg1=""
+m_arg2=""
 
 # Get the directory path of the script
 m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
@@ -68,14 +69,15 @@ while [[ $# -gt 0 ]]; do
     *)
       # Capture the command and argument
       m_command=$1
-      m_argument=$2
+      m_arg1=$2
+      m_arg2=$3
       break;;
   esac
   shift
 done
 
 # echo command: $m_command
-# echo argu: $m_argument
+# echo argu: $m_arg1
 # Check if command argument is provided
 if [ -z "$m_command" ]; then
   echo "Error: Command argument is required."
@@ -164,7 +166,7 @@ case $m_command in
         exit 1
     fi
     echo "Running 'send' command"
-    ${m_script_dir}/../dst_send.sh -C $param_cluster_serial -s $param_tmux_session_name $m_argument
+    ${m_script_dir}/../dst_send.sh -C $param_cluster_serial -s $param_tmux_session_name $m_arg1
     ;;
   send_preset)
     # Code to perform the 'send_preset' command
@@ -173,7 +175,7 @@ case $m_command in
         exit 1
     fi
     echo "Running 'send_preset' command"
-    ${m_script_dir}/../dst_send_preset.sh -C $param_cluster_serial -s $param_tmux_session_name $m_argument
+    ${m_script_dir}/../dst_send_preset.sh -C $param_cluster_serial -s $param_tmux_session_name $m_arg1 $m_arg2
     ;;
   *)
     echo "Error: Unknown command '$m_command'."
