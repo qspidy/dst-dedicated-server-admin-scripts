@@ -5,7 +5,7 @@ m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 m_complete_sub_prefix="complete -c al_dstserver -n '__fish_seen_subcommand_from al_dstserver send_preset' -f"
 
 # uninstall old version
-chmod +x ${m_script_dir}/uninstall.sh
+chmod 744 ${m_script_dir}/uninstall.sh
 if [ ! -f "${m_script_dir}/uninstall.sh" ]; then
   echo "${m_script_dir}/uninstall.sh not found, please check."
   exit 1
@@ -13,8 +13,8 @@ fi
 ${m_script_dir}/uninstall.sh
 
 # grant exec rights
-chmod +x ${m_script_dir}/*.sh
-chmod +x ${m_script_dir}/albin/*
+chmod 744 ${m_script_dir}/*.sh
+chmod 744 ${m_script_dir}/albin/*
 
 # add albin to PATH
 albin_directory=${m_script_dir}/albin
