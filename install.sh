@@ -14,29 +14,30 @@ ${m_script_dir}/uninstall.sh
 
 # grant exec rights
 chmod 744 ${m_script_dir}/*.sh
-chmod 744 ${m_script_dir}/albin/*
+chmod 744 ${m_script_dir}/bin/*
+chmod 744 ${m_script_dir}/lib/*
 
-# add albin to PATH
-albin_directory=${m_script_dir}/albin
+# add bin to PATH
+bin_directory=${m_script_dir}/bin
 
 # Check if the directory exists
-if [ -d "$albin_directory" ]; then
+if [ -d "$bin_directory" ]; then
   # Get the user's default shell
   default_shell=$(basename "$SHELL")
 
   # Add the directory to the appropriate shell configuration file
   case $default_shell in
     bash)
-      echo "export PATH=\"$albin_directory:\$PATH\"" >> ~/.bashrc
-      echo "albin directory added to PATH for Bash."
+      echo "export PATH=\"$bin_directory:\$PATH\"" >> ~/.bashrc
+      echo "bin directory added to PATH for Bash."
       ;;
     zsh)
-      echo "export PATH=\"$albin_directory:\$PATH\"" >> ~/.zshrc
-      echo "albin directory added to PATH for Zsh."
+      echo "export PATH=\"$bin_directory:\$PATH\"" >> ~/.zshrc
+      echo "bin directory added to PATH for Zsh."
       ;;
     fish)
-      echo "set PATH \"$albin_directory\":\$PATH" >> ~/.config/fish/config.fish
-      echo "albin directory added to PATH for Fish."
+      echo "set PATH \"$bin_directory\":\$PATH" >> ~/.config/fish/config.fish
+      echo "bin directory added to PATH for Fish."
       # and auto completion
       # complete -c al_dstserver -d "discription like 'start server'" -f -a 'start' -x
 
@@ -53,9 +54,9 @@ if [ -d "$albin_directory" ]; then
       echo "completion added"
       ;;
     *)
-      echo "Unsupported shell: $albin_directory. Please manually add the directory to the appropriate shell configuration file."
+      echo "Unsupported shell: $bin_directory. Please manually add the directory to the appropriate shell configuration file."
       ;;
   esac
 else
-  echo "albin directory does not exist."
+  echo "bin directory does not exist."
 fi
