@@ -69,9 +69,9 @@ if [ -z "$m_command" ]; then
   exit 1
 fi
 
-# Check if albin/tmux_send.al exist.
-if [ ! -f "${m_script_dir}/tmux_send.al" ]; then
-        echo "${m_script_dir}/tmux_send.al not found, please check."
+# Check if albin/tmux_send.sh exist.
+if [ ! -f "${m_script_dir}/tmux_send.sh" ]; then
+        echo "${m_script_dir}/tmux_send.sh not found, please check."
         exit 1
 fi
 
@@ -79,9 +79,9 @@ fi
 
 # Perform actions based on the options
 if [[ $param_cluster_type == "Caves" ]]; then
-  ${m_script_dir}/tmux_send.al ${param_tmux_session_name}:1 "$m_command"
+  ${m_script_dir}/tmux_send.sh ${param_tmux_session_name}:1 "$m_command"
 else
-  ${m_script_dir}/tmux_send.al ${param_tmux_session_name}:0 "$m_command"
+  ${m_script_dir}/tmux_send.sh ${param_tmux_session_name}:0 "$m_command"
 fi
 
 # Additional code or actions can be added here

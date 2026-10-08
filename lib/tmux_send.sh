@@ -3,7 +3,7 @@
 # Function to display help message
 display_help() {
     echo "Usage: $0 <session_name>:<window_serial_num> <command>"
-    echo "e.g.: tmux_send.al dst-3:0 'c_save()'"
+    echo "e.g.: tmux_send.sh dst-3:0 'c_save()'"
 }
 
 # Check the number of arguments
