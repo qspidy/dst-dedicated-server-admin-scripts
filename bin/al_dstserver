@@ -4,7 +4,7 @@ g_dst_save_path=$HOME/.klei/DoNotStarveTogether
 param_cluster_serial="0"
 param_tmux_session_name="dst-0"
 m_command=""
-m_args=""
+m_args=()
 
 # Get the directory path of the script
 # m_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)/.."
@@ -80,7 +80,7 @@ while [[ $# -gt 0 ]]; do
         # Capture the command and argument
         m_command=$1
         shift
-        m_args=$@
+        m_args=("$@")
         break;;
     esac
     shift
@@ -156,7 +156,7 @@ run_send_command() {
     send_script="${m_script_dir}/dst_send.sh"
     check_script_existence "$send_script"
     echo "Running 'send' command"
-    "$send_script" -C $param_cluster_serial -s $param_tmux_session_name $m_args
+    "$send_script" -C "$param_cluster_serial" -s "$param_tmux_session_name" "${m_args[@]}"
 }
 
 # Function to run the 'send_preset' command
@@ -164,7 +164,7 @@ run_send_preset_command() {
     send_preset_script="${m_script_dir}/dst_send_preset.sh"
     check_script_existence "$send_preset_script"
     echo "Running 'send_preset' command"
-    "$send_preset_script" -C $param_cluster_serial -s $param_tmux_session_name $m_args
+    "$send_preset_script" -C "$param_cluster_serial" -s "$param_tmux_session_name" "${m_args[@]}"
 }
 
 # Function to check if a script exists, otherwise exit with an error message
